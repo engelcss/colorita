@@ -2,28 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Cookie;
 
-class MainController extends Controller
+/**
+ * Реализация приложения через один контроллер типа Ресурс
+ * Очень просто, очень быстро, просто для тренировки psr7 и
+ * небольшого взгляда на Lumen. Спасибо.
+ */
+class MainController extends JsonController
 {
-
-    /**
-     * Реализация приложения через один контроллер типа Ресурс
-     * Очень просто, очень быстро, просто для тренировки psr7 и
-     * небольшого взгляда на Lumen. Спасибо.
-     */
-
-    protected $request;
-    protected $response;
-
-    public function __construct(Request $request, JsonResponse $response)
-    {
-        $this->request = $request;
-        $this->response = $response;
-    }
-
     /**
      * Домашняя страница:
      * $router->get('/')
@@ -37,8 +24,6 @@ class MainController extends Controller
     {
         $content = ['status' => 'ok', 'data' => ['colors' => ['#001122', '#005543', '#4b3f20']]];
         $this->response
-            ->setStatusCode(200)
-            ->setData($content)
             ->withCookie(Cookie::create('myCookie1', 'cookie1'))
             ->send();
     }
