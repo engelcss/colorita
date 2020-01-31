@@ -19,12 +19,15 @@ class MainController extends JsonController
      * Должна возвращать определенное кол-во палитр (с кол-вом определимся попозже)
      * в формате json
      *
+     * В параметрах ожидает номер страницы
+     * @param integer $page
+     *
      * send() посылает ответ клиенту.
      */
-    public function index()
+    public function index(int $page = 0)
     {
-        $palettes = Palette::take(80)->skip(0)->get();
-        dd($palettes);
+        $limit = 80;
+        $palettes = Palette::take($limit)->skip($limit*$page)->get();
         $data = ['id' => ['color1', 'color2', 'color3']];
         $this->setResponse($data)->send();
     }
@@ -37,13 +40,16 @@ class MainController extends JsonController
      * создавать запись со сгенерированным url
      * и отдавать url свежесозданной палитры
      *
-     * send() посылает ответ клиенту.
+     * send() посылает ответ клиенту
      */
     public function create()
     {
-        $data = $this->request->all();
-
-        $this->setResponse($data)->send();
+        $palette = new Palette;
+        $url = $palette->generateUrl();
+        $palette->url = $url;
+        $palette->ip = $_SERVER['REMOTE_ADDR'];
+        $palette->save();
+        $this->setResponse(['id' => $palette->id, 'url' => $url])->send();
     }
 
     /**

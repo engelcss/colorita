@@ -1,7 +1,5 @@
 <?php
 
-use Symfony\Component\HttpFoundation\Request;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -13,4 +11,5 @@ use Symfony\Component\HttpFoundation\Request;
 |
 */
 
-$router->get('/', 'MainController@index');
+$router->get('[/{page}]', 'MainController@index');
+$router->post('/create', 'MainController@create');
