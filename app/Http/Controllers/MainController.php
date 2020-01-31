@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Symfony\Component\HttpFoundation\Cookie;
+use App\Palette;
+use App\Color;
 
 /**
  * Реализация приложения через один контроллер типа Ресурс
@@ -22,10 +23,10 @@ class MainController extends JsonController
      */
     public function index()
     {
-        $content = ['status' => 'ok', 'data' => ['colors' => ['#001122', '#005543', '#4b3f20']]];
-        $this->response
-            ->withCookie(Cookie::create('myCookie1', 'cookie1'))
-            ->send();
+        $palettes = Palette::take(80)->skip(0)->get();
+        dd($palettes);
+        $data = ['id' => ['color1', 'color2', 'color3']];
+        $this->setResponse($data)->send();
     }
 
     /**
@@ -41,10 +42,8 @@ class MainController extends JsonController
     public function create()
     {
         $data = $this->request->all();
-        $this->response
-            ->setStatusCode(200)
-            ->setData(['url' => 'kdsgDf'])
-            ->send();
+
+        $this->setResponse($data)->send();
     }
 
     /**
@@ -58,7 +57,7 @@ class MainController extends JsonController
      */
     public function get($url)
     {
-
+        $this->setResponse()->send();
     }
 
     /**
@@ -71,7 +70,7 @@ class MainController extends JsonController
      */
     public function edit($id)
     {
-
+        $this->setResponse()->send();
     }
 
     /**
@@ -84,6 +83,6 @@ class MainController extends JsonController
      */
     public function delete($id)
     {
-
+        $this->setResponse()->send();
     }
 }

@@ -17,10 +17,19 @@ class JsonController extends Controller
         $this->response = $response;
     }
 
-    protected function setResponse(int $code = 200, $data = array())
+    protected function setResponse($data = array(), int $code = 200, string $status = 'ok')
     {
         $this->response
             ->setStatusCode($code)
-            ->setData($data);
+            ->setData(['status' => $status, 'data' => $data]);
+
+        return $this;
+    }
+
+    protected function send()
+    {
+        //TODO: Проверки перед отправкой.
+
+        $this->response->send();
     }
 }
