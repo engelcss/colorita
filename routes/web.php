@@ -11,5 +11,8 @@
 |
 */
 
-$router->get('[/{page}]', 'MainController@index');
+$router->get('/[page/{page}]', 'MainController@index');
 $router->post('/create', 'MainController@create');
+$router->get('/generate/fucking/palettes/{please}', 'MainController@generateFuckingPalettes');
+
+$router->get('/{url}', 'MainController@get');

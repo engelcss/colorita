@@ -24,11 +24,15 @@ class MainController extends JsonController
      *
      * send() посылает ответ клиенту.
      */
-    public function index(int $page = 0)
+    public function index(int $page = null)
     {
         $limit = 80;
-        $palettes = Palette::take($limit)->skip($limit*$page)->get();
-        $data = ['id' => ['color1', 'color2', 'color3']];
+
+        $palettes = Palette::with('colors')
+            ->forPage($page, $limit)
+            ->get()
+            ->toArray();
+        $data = $palettes;
         $this->setResponse($data)->send();
     }
 
@@ -44,12 +48,24 @@ class MainController extends JsonController
      */
     public function create()
     {
-        $palette = new Palette;
+        //Добавление палитр
+        $palette = new Palette();
         $url = $palette->generateUrl();
         $palette->url = $url;
         $palette->ip = $_SERVER['REMOTE_ADDR'];
         $palette->save();
-        $this->setResponse(['id' => $palette->id, 'url' => $url])->send();
+
+        //Добавление красок (в вашу жизнь)
+        $paletteId = $palette->id;
+
+        foreach ($this->request->all() as $item) {
+            $palette->colors()
+                ->create(
+                    ['palette_id' => $paletteId, 'sort' => $item['sort'], 'color' => $item['color']]
+                );
+        }
+
+        $this->setResponse(['id' => $paletteId, 'url' => $url])->send();
     }
 
     /**
@@ -63,20 +79,11 @@ class MainController extends JsonController
      */
     public function get($url)
     {
-        $this->setResponse()->send();
-    }
-
-    /**
-     * Редактирование палитры:
-     * $router->patch('/edit/{id}')
-     *
-     * @param $id
-     *
-     * send() посылает ответ клиенту.
-     */
-    public function edit($id)
-    {
-        $this->setResponse()->send();
+        $data = Palette::where('url', $url)
+            ->with('colors')
+            ->first()
+            ->toArray();
+        $this->setResponse($data)->send();
     }
 
     /**
@@ -90,5 +97,29 @@ class MainController extends JsonController
     public function delete($id)
     {
         $this->setResponse()->send();
+    }
+
+    public function generateFuckingPalettes($please)
+    {
+        if ($please !== 'please') {
+            return 'Just say magic word!';
+        }
+
+        for ($i = 1; $i <= 5000; $i++) {
+            $colorsArray = [];
+
+            $range = mt_rand(2, 10);
+
+            for ($o = 1; $o <= $range; $o++) {
+                $colorsArray[] = ['sort' => $o, 'color' => bin2hex(random_bytes(3))];
+            }
+
+            $this->request->request->add($colorsArray);
+            $this->request->setMethod('POST');
+
+            $this->create();
+        }
+
+        return "Создано " . $i . " записей";
     }
 }

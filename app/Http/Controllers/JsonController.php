@@ -29,7 +29,11 @@ class JsonController extends Controller
     protected function send()
     {
         //TODO: Проверки перед отправкой.
-
+        $this->response->withHeaders([
+            'Content-Type' => 'application/json',
+            'Access-Control-Allow-Origin' => 'http://127.0.0.1:5500',
+            'Access-Control-Allow-Headers' => 'X-Requested-With'
+        ]);
         $this->response->send();
     }
 }

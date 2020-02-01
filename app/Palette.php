@@ -16,10 +16,10 @@ class Palette extends Model
     {
         $url = Str::random(5);
 
-        if (self::where('url', $url)->count() !== 0) {
-            $this->generateUrl();
+        if (self::where('url', $url)->count() != 0) {
+            return $this->generateUrl();
+        } else {
+            return $url;
         }
-
-        return $url;
     }
 }
