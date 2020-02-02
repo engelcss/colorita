@@ -87,19 +87,18 @@ class MainController extends JsonController
     }
 
     /**
-     * Удаление палитры:
-     * $router->delete('/delete/{id}')
+     * Небольшой генератор палитр с цветами в hex
      *
-     * @param $id
+     * Волшебное слово для запуска генератора :)
+     * @param $please
      *
-     * send() посылает ответ клиенту.
+     * Результат генерации
+     * @return string
+     *
+     *  rand() генерирует исключение
+     * @throws \Exception
      */
-    public function delete($id)
-    {
-        $this->setResponse()->send();
-    }
-
-    public function generateFuckingPalettes($please)
+    public function generatePalettes($please)
     {
         if ($please !== 'please') {
             return 'Just say magic word!';
@@ -108,7 +107,7 @@ class MainController extends JsonController
         for ($i = 1; $i <= 5000; $i++) {
             $colorsArray = [];
 
-            $range = mt_rand(2, 10);
+            $range = rand(2, 10);
 
             for ($o = 1; $o <= $range; $o++) {
                 $colorsArray[] = ['sort' => $o, 'color' => bin2hex(random_bytes(3))];
@@ -120,6 +119,6 @@ class MainController extends JsonController
             $this->create();
         }
 
-        return "Создано " . $i . " записей";
+        return "Создано " . ($i--) . " записей";
     }
 }
