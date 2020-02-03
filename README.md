@@ -5,12 +5,12 @@
 ## Установка
 
 1. git clone ... 
-2. composer install
-3. composer dumpautoload
+2. [in console] composer install
+3. [in console] composer dumpautoload
 4. Copy .env.example as .env 
-5. php artisan key:generate
+5. [in console] php artisan key:generate
 6. Change config in .env (general & database)
-7. php artisan migrate
+7. [in console] php artisan migrate
 8. For generating 5000 palettes (dummy), go to http://your.domain/generate/palettes/please
 9. Enjoy!
 
