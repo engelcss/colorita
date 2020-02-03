@@ -99,7 +99,7 @@ class MainController extends JsonController
         $this->setResponse()->send();
     }
 
-    public function generateFuckingPalettes($please)
+    public function generatePalettes($please)
     {
         if ($please !== 'please') {
             return 'Just say magic word!';

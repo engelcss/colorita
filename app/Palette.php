@@ -15,7 +15,6 @@ class Palette extends Model
     public function generateUrl()
     {
         $url = Str::random(5);
-dd($url);
         if (self::where('url', $url)->count() != 0) {
             return $this->generateUrl();
         } else {
