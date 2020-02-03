@@ -15,7 +15,7 @@ class CreateColorsTable extends Migration
     {
         Schema::create('colors', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('palette_id');
+            $table->bigInteger('palette_id')->unsigned();
             $table->tinyInteger('sort');
             $table->string('color', 6);
 
