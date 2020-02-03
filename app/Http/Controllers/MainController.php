@@ -104,22 +104,7 @@ class MainController extends JsonController
         if ($please !== 'please') {
             return 'Just say magic word!';
         }
-
-        for ($i = 1; $i <= 5000; $i++) {
-            $colorsArray = [];
-
-            $range = mt_rand(2, 10);
-
-            for ($o = 1; $o <= $range; $o++) {
-                $colorsArray[] = ['sort' => $o, 'color' => bin2hex(random_bytes(3))];
-            }
-
-            $this->request->request->add($colorsArray);
-            $this->request->setMethod('POST');
-
-            $this->create();
-        }
-
-        return "Создано " . $i . " записей";
+        \PalettesColorsTablesSeeder::generate();
+        return redirect('/');
     }
 }
