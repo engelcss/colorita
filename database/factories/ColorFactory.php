@@ -2,8 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Palette;
-use App\Color;
+use \App\Color;
 use Faker\Generator as Faker;
 
 /*
@@ -17,9 +16,9 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Palette::class, function (Faker $faker) {
+$factory->define(Color::class, function (Faker $faker, $attributes) {
     return [
-        'url' => $faker->bothify('?????'),
-        'ip' => $faker->ipv4,
+        'sort' => $attributes,
+        'color' => $faker->hexColor,
     ];
 });

@@ -8,12 +8,7 @@ class PalettesColorsTablesSeeder extends Seeder
     public function run()
     {
         factory(Palette::class, 10)
-            ->create(['ip' => '255.255.255.255'])
-            ->each(function ($palette) {
-                $palette->url = $palette->generateUrl();
-                factory(\App\Color::class, rand(2,10))
-                    ->create(['palette_id' => $palette->id,'sort' => 's', 'color' => 'c']);
-        });
+           ->create();
     }
 
     /**
