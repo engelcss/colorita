@@ -18,7 +18,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Color::class, function (Faker $faker, $attributes) {
     return [
-        'sort' => $attributes,
-        'color' => $faker->hexColor,
+        'palette_id' => $attributes['palette_id'],
+        'sort' => $attributes['sort'],
+        'color' => substr($faker->hexColor, 1),
     ];
 });

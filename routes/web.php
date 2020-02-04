@@ -12,7 +12,7 @@
 */
 
 $router->get('/[page/{page}]', 'MainController@index');
-$router->post('/create', 'MainController@create');
+$router->post('/palette/create', 'MainController@create');
 $router->get('/{url}', 'MainController@get');
 
 $router->get('/generate/palettes/{please}', 'MainController@generatePalettes');

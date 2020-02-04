@@ -34,6 +34,6 @@ class JsonController extends Controller
             'Access-Control-Allow-Origin' => 'http://127.0.0.1:5500',
             'Access-Control-Allow-Headers' => 'X-Requested-With'
         ]);
-        $this->response->send();
+        $this->response->setEncodingOptions(JSON_PRETTY_PRINT)->send();
     }
 }

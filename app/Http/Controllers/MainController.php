@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Palette;
-use App\Color;
 
 /**
  * Реализация приложения через один контроллер типа Ресурс
@@ -31,9 +30,9 @@ class MainController extends JsonController
         $palettes = Palette::with('colors')
             ->forPage($page, $limit)
             ->get()
+            ->makeHidden(['ip', 'created_at', 'updated_at'])
             ->toArray();
-        $data = $palettes;
-        $this->setResponse($data)->send();
+        $this->setResponse($palettes)->send();
     }
 
     /**
@@ -48,10 +47,12 @@ class MainController extends JsonController
      */
     public function create()
     {
+        if ($this->request->method()) {
+            dd(4);
+        }
         //Добавление палитр
         $palette = new Palette();
-        $url = $palette->generateUrl();
-        $palette->url = $url;
+        $palette->url = $palette->generateUrl();
         $palette->ip = $_SERVER['REMOTE_ADDR'];
         $palette->save();
 
@@ -77,26 +78,15 @@ class MainController extends JsonController
      *
      * send() посылает ответ клиенту.
      */
-    public function get($url)
+    public function get(string $url)
     {
-        $data = Palette::where('url', $url)
+        $palette = Palette::where('url', $url)
             ->with('colors')
-            ->first()
-            ->toArray();
-        $this->setResponse($data)->send();
-    }
-
-    /**
-     * Удаление палитры:
-     * $router->delete('/delete/{id}')
-     *
-     * @param $id
-     *
-     * send() посылает ответ клиенту.
-     */
-    public function delete($id)
-    {
-        $this->setResponse()->send();
+            ->first();
+        if ($palette) {
+            $palette->makeHidden(['ip', 'created_at', 'updated_at']);
+        }
+        $this->setResponse($palette)->send();
     }
 
     public function generatePalettes($please)
@@ -104,7 +94,8 @@ class MainController extends JsonController
         if ($please !== 'please') {
             return 'Just say magic word!';
         }
-        \PalettesColorsTablesSeeder::generate();
+        $seeder = new \PalettesColorsTablesSeeder();
+        $seeder->run();
         return redirect('/');
     }
 }
