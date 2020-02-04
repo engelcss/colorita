@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Palette;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Реализация приложения через один контроллер типа Ресурс
@@ -15,7 +16,7 @@ class MainController extends JsonController
      * Домашняя страница:
      * $router->get('/')
      *
-     * Должна возвращать определенное кол-во палитр (с кол-вом определимся попозже)
+     * Возвращает палитры (с пагинацией по 80 элементов)
      * в формате json
      *
      * В параметрах ожидает номер страницы
@@ -23,7 +24,7 @@ class MainController extends JsonController
      *
      * send() посылает ответ клиенту.
      */
-    public function index(int $page = null)
+    public function index(int $page = 1)
     {
         $limit = 80;
 
@@ -37,36 +38,38 @@ class MainController extends JsonController
 
     /**
      * Создание палитры из цветов:
-     * $router->post('/create/')
+     * $router->post('palette/create/')
      *
-     * Должна принимать данные из post,
-     * создавать запись со сгенерированным url
-     * и отдавать url свежесозданной палитры
+     * Принимает данные из post,
+     * вида
      *
-     * send() посылает ответ клиенту
+     * {"data" : [ { "sort" : "1" , "color" : "e1e1e1" } , { "sort" : "2" , "color" : "f2f2f2" } ] }
+     *
+     * создает запись со сгенерированным url
+     * Возвращает url свежесозданной палитры
      */
     public function create()
     {
-        if ($this->request->method()) {
-            dd(4);
+        $data = $this->request->json('data');
+
+        if (!isset($data) || empty($data)) {
+            $this->setResponse('Data is missing.', 200, 'error')->send();
+            exit();
         }
+
         //Добавление палитр
         $palette = new Palette();
-        $palette->url = $palette->generateUrl();
-        $palette->ip = $_SERVER['REMOTE_ADDR'];
         $palette->save();
 
-        //Добавление красок (в вашу жизнь)
-        $paletteId = $palette->id;
-
-        foreach ($this->request->all() as $item) {
+        //Добавление красок в вашу жизнь :)
+        foreach ($data as $item) {
             $palette->colors()
                 ->create(
-                    ['palette_id' => $paletteId, 'sort' => $item['sort'], 'color' => $item['color']]
+                    ['palette_id' => $palette->id, 'sort' => $item['sort'], 'color' => $item['color']]
                 );
         }
 
-        $this->setResponse(['id' => $paletteId, 'url' => $url])->send();
+        $this->setResponse(['id' => $palette->id, 'url' => $palette->url])->send();
     }
 
     /**

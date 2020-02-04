@@ -7,6 +7,13 @@ use Illuminate\Support\Str;
 
 class Palette extends Model
 {
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->url = $this->generateUrl();
+        $this->ip = $_SERVER['REMOTE_ADDR'];
+    }
+
     public function colors()
     {
         return $this->hasMany('\App\Color');
