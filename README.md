@@ -21,7 +21,7 @@
 8. ...
 9. Enjoy!
 
-####Note:
+#### Note:
 
 You can to start server easily, just use this command from your project's directory 
 
@@ -29,7 +29,7 @@ You can to start server easily, just use this command from your project's direct
 
 and go to http://localhost:8000/
 
-##Docs
+## Docs
 
 GET first 80 palettes:
 
