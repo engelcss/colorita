@@ -37,7 +37,7 @@ GET first 80 palettes:
 
 GET for 2 page etc.:
 
-`http://your.domain/2`
+`http://your.domain/page/2`
 
 GET the palette:
 
